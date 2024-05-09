@@ -1,42 +1,90 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>leaflet-poviders Mocha Tests</title>
-	<link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
-	<link rel="stylesheet" href="http://unpkg.com/leaflet@latest/dist/leaflet.css" />
+	<title>Leaflet Provider Demo</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
 
 	<style>
-		#map {
-			width: 100%;
-			height: 200px;
+		html {
+			height: 100%;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			vertical-align: baseline;
+		}
+		body, #container { height: 100%; margin: 0; padding: 0;}
+		.map { height: 100%; }
+
+		#info {
+			background: rgba(255, 255, 255, 0.85);
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+			position: fixed;
+			width: 50%;
+			max-width: 600px;
+			left: 45%;
+			margin-left: -300px;
+			padding: 6px 8px;
+
+			border-radius: 5px;
+			font: 14px/16px Arial, Helvetica, sans-serif;
+		}
+		#info h4:first-child {
+			margin: 0 0 5px;
+		}
+		#info h4 {
+			margin: 5px 0 5px;
+		}
+		#info h4 code {
+			font-weight: normal;
+		}
+		#info .provider-names {
+			padding-bottom: 5px;
+			display: block;
+			padding-left: 15px;
+		}
+		#info pre {
+			margin: 0;
+		}
+		#info pre code {
+			font-size: 10px;
+			overflow-x: auto;
 		}
 	</style>
+	<!--Fork Me on Github ribbon, we're using the awesome version from simonwhitaker available at https://github.com/simonwhitaker/github-fork-ribbon-css  -->
+	<link rel="stylesheet" href="../css/gh-fork-ribbon.css" />
+	<!--[if IE]>
+		<link rel="stylesheet" href="../css/gh-fork-ribbon.ie.css" />
+	<![endif]-->
+	<link rel="stylesheet" href="vendor/github.css">
+	<link rel="stylesheet" href="vendor/control.layers.minimap.css">
 </head>
 <body>
-	<div id="mocha"></div>
-	<div id="map"></div>
+	<div class="github-fork-ribbon-wrapper left">
+		<div class="github-fork-ribbon">
+			<a href="https://github.com/leaflet-extras/leaflet-providers">Fork me on GitHub</a>
+		</div>
+	</div>
 
-	<script src="../node_modules/chai/chai.js"></script>
-	<script src="../node_modules/mocha/mocha.js"></script>
+	<div id="info">
+		<h4><a href="https://github.com/leaflet-extras/leaflet-providers">Leaflet-providers preview</a></h4>
+		<p>
+			This page shows mini maps for all the layers available in <a href="https://github.com/leaflet-extras/leaflet-providers">Leaflet-providers</a>.
+		</p>
+	</div>
+	<div id="map" class="map"></div>
 
-	<script src="http://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
 	<script src="../leaflet-providers.js"></script>
-	<script src="../preview/shared.js"></script>
 
-	<script>
-		if (window.initMochaPhantomJS) { window.initMochaPhantomJS(); }
-		mocha.setup('bdd');
-	</script>
+	<script src="vendor/L.Control.Layers.Minimap.js"></script>
 
-	<script src="test.js"></script>
+	<script src="vendor/highlight.pack.js"></script>
 
-	<script>
-		mocha.checkLeaks();
-		if (window.mochaPhantomJS) {
-			mochaPhantomJS.run();
-		} else {
-			mocha.run();
-		}
-	</script>
+	<script src="shared.js"></script>
+	<script src="preview.js"></script>
 </body>
 </html>
