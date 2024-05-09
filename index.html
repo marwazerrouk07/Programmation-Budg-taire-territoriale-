@@ -1,116 +1,42 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Programmation Budgétaire Territoriale</title>
-    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-    <link rel="stylesheet" href="leaflet.css" />
-    <script src="leaflet.js"></script>
-    <!-- Include Leaflet Providers plugin -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.12.0/leaflet-providers.min.js"></script>
-    <style>
-        #map-container {
-            text-align: center;
-        }
+	<meta charset="utf-8">
+	<title>leaflet-poviders Mocha Tests</title>
+	<link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+	<link rel="stylesheet" href="http://unpkg.com/leaflet@latest/dist/leaflet.css" />
 
-        #map {
-            width: 80%; /* Adjust map width as needed */
-            height: 600px; /* Adjust map height as needed */
-            margin: 0 auto; /* Center the map horizontally */
-        }
-
-        #popup {
-            position: fixed;
-            top: 25%; /* Adjust distance from top as needed */
-            left: 25%; /* Center horizontally */
-            transform: translateX(-50%); /* Center horizontally */
-            background-color: #bcbddc;
-            padding: 10px;
-            border: 1px solid #54278f;
-            border-radius: 5px;
-            font-size: 16px;
-            z-index: 9999;
-            display: none;
-        }
-    </style>
+	<style>
+		#map {
+			width: 100%;
+			height: 200px;
+		}
+	</style>
 </head>
 <body>
-    <h1 style="text-align: center;">Programmation Budgétaire Territoriale</h1>
+	<div id="mocha"></div>
+	<div id="map"></div>
 
-    <div id="map-container">
-        <div id='map'></div>
-        <div id="popup"></div>
-    </div>
+	<script src="../node_modules/chai/chai.js"></script>
+	<script src="../node_modules/mocha/mocha.js"></script>
 
-    <script type="text/javascript" src="NEWW.js"></script>
+	<script src="http://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+	<script src="../leaflet-providers.js"></script>
+	<script src="../preview/shared.js"></script>
 
-    <script type="text/javascript">
+	<script>
+		if (window.initMochaPhantomJS) { window.initMochaPhantomJS(); }
+		mocha.setup('bdd');
+	</script>
 
-        var map = L.map('map').setView([29, -6], 5);
+	<script src="test.js"></script>
 
-// Use 'OpenStreetMap German Style' tile layer provider
-var tileLayer = L.tileLayer.provider('OpenStreetMap.DE', {
-    opacity: 0.5 // Adjust opacity as needed (0 = fully transparent, 1 = fully opaque)
-}).addTo(map);
-
-
-        // Define a color palette for regions
-        var colorPalette = {
-            'Dakhla-Oued Eddahab': '#a63603', // Red
-            'Tanger-Tetouan-Hoceima': '#00ff00', // Green
-            'Rabat-Sale-Kenitra': '#fdae6b', // Orange
-            'Beni Mellal-Khenifra': '#e41a1c', // Dark Red
-            'Souss Massa': '#377eb8', // Blue
-            'Casablanca-Settat': '#4daf4a', // Green
-            'Oriental': '#ff7f00', // Amber
-            'Fes-Meknes': '#984ea3', // Purple
-            'Guelmim-Oued Noun': '#ff00ff', // Magenta
-            'Laayoune-Saguia Hamra': '#ffff33', // Yellow
-            'Daraa-Tafilelt': '#a65628', // Brown
-            'Marrakech-Safi': '#f781bf' // Pink
-            // Add more regions and colors as needed
-        };
-
-        // Define a function to get color based on region name
-        function getColor(region) {
-            return colorPalette[region] || '#808080'; // Default gray color if region not found in palette
-        }
-
-        // Define a function to update popup content
-        function updatePopupContent(properties) {
-            var content = "<b>Region:</b> " + properties.region + "<br>" +
-                          "<b>Engagements:</b> " + properties['Engagements '] + " Mdhs"+ "<br>" +
-                          "<b>Engagements non exécutés:</b> " + properties['Engagements non exécutés '] +" Mdhs"+ "<br>" +
-                          "<b>Prévisions:</b> " + properties.Prévisions + " Mdhs"+"<br>" +
-                          "<b>Solde:</b> " + properties.Solde +" Mdhs"+ "<br>" +
-                          "<b>Eng. Urbain:</b> " + properties['Eng. Urbain'] + " Mdhs"+"<br>" +
-                          "<b>Eng Rural:</b> " + properties['Eng. Rural']+" Mdhs";
-
-            document.getElementById("popup").innerHTML = content;
-        }
-
-        // Load GeoJSON data and add popup on hover
-        var geojson = L.geoJson(maregionf, {
-            style: function(feature) {
-                return {
-                    fillColor: getColor(feature.properties.region), // Use region name to get color
-                    weight: 2,
-                    opacity: 1,
-                    color: 'white',
-                    dashArray: '3',
-                    fillOpacity: 0.7
-                };
-            },
-            onEachFeature: function(feature, layer) {
-                layer.on('mouseover', function(e) {
-                    updatePopupContent(feature.properties);
-                    document.getElementById("popup").style.display = "block";
-                });
-                layer.on('mouseout', function(e) {
-                    document.getElementById("popup").style.display = "none";
-                });
-            }
-        }).addTo(map);
-
-    </script>
+	<script>
+		mocha.checkLeaks();
+		if (window.mochaPhantomJS) {
+			mochaPhantomJS.run();
+		} else {
+			mocha.run();
+		}
+	</script>
 </body>
 </html>
