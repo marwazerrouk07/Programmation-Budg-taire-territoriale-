@@ -1,90 +1,102 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Leaflet Provider Demo</title>
+	<title>Prévisions 2024-2028 Casablanca-Settat</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
+	<!-- Leaflet style. REQUIRED! -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
-
 	<style>
-		html {
-			height: 100%;
-			-moz-box-sizing: border-box;
-			-webkit-box-sizing: border-box;
-			box-sizing: border-box;
-			vertical-align: baseline;
-		}
-		body, #container { height: 100%; margin: 0; padding: 0;}
-		.map { height: 100%; }
+		html { height: 100% }
+		body { height: 100%; margin: 0; padding: 0;}
+		.map { width: 80%; /* Adjust map width as needed */
+            height: 600px; /* Adjust map height as needed */
+            margin: 0 auto; /* Center the map horizontally */
+             }
+        #popup {
+            position: fixed;
+            top: 50%; /* Center vertically */
+            left: 20%; /* Center horizontally */
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 2px solid #54278f;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            color: #333;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            display: none;
+            max-width: 300px; /* Set a maximum width for the popup */
+            text-align: center; /* Center align the text */
+        }
+        .legend {
+            position: fixed;
+            bottom: 25px; /* Ajustez la distance par rapport au bas de la page */
+            right: 130px; /* Ajustez la distance par rapport à la droite de la page */
+            background-color: #ffffff; /* Couleur de fond */
+            padding: 10px; /* Espace intérieur */
+            border: 1px solid #000000; /* Bordure */
+            border-radius: 5px; /* Coins arrondis */
+            font-family: sans-serif;
+            line-height: 26px;
+        }
+        .second-line {
+            background-color: #ffffff; /* Couleur de fond */
+            padding: 0px; /* Espacement intérieur */
 
-		#info {
-			background: rgba(255, 255, 255, 0.85);
-			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-			position: fixed;
-			width: 50%;
-			max-width: 600px;
-			left: 45%;
-			margin-left: -300px;
-			padding: 6px 8px;
-
-			border-radius: 5px;
-			font: 14px/16px Arial, Helvetica, sans-serif;
-		}
-		#info h4:first-child {
-			margin: 0 0 5px;
-		}
-		#info h4 {
-			margin: 5px 0 5px;
-		}
-		#info h4 code {
-			font-weight: normal;
-		}
-		#info .provider-names {
-			padding-bottom: 5px;
-			display: block;
-			padding-left: 15px;
-		}
-		#info pre {
-			margin: 0;
-		}
-		#info pre code {
-			font-size: 10px;
-			overflow-x: auto;
-		}
-	</style>
-	<!--Fork Me on Github ribbon, we're using the awesome version from simonwhitaker available at https://github.com/simonwhitaker/github-fork-ribbon-css  -->
-	<link rel="stylesheet" href="../css/gh-fork-ribbon.css" />
-	<!--[if IE]>
-		<link rel="stylesheet" href="../css/gh-fork-ribbon.ie.css" />
-	<![endif]-->
-	<link rel="stylesheet" href="vendor/github.css">
-	<link rel="stylesheet" href="vendor/control.layers.minimap.css">
+            /* Ajuster la position horizontale */
+            margin-left: 100px; /* Ajuster la marge de gauche pour déplacer le texte vers la droite */
+        }
+    </style>
 </head>
 <body>
-	<div class="github-fork-ribbon-wrapper left">
-		<div class="github-fork-ribbon">
-			<a href="https://github.com/leaflet-extras/leaflet-providers">Fork me on GitHub</a>
-		</div>
-	</div>
-
-	<div id="info">
-		<h4><a href="https://github.com/leaflet-extras/leaflet-providers">Leaflet-providers preview</a></h4>
-		<p>
-			This page shows mini maps for all the layers available in <a href="https://github.com/leaflet-extras/leaflet-providers">Leaflet-providers</a>.
-		</p>
-	</div>
-	<div id="map" class="map"></div>
-
-	<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
-	<script src="../leaflet-providers.js"></script>
-
-	<script src="vendor/L.Control.Layers.Minimap.js"></script>
-
-	<script src="vendor/highlight.pack.js"></script>
-
-	<script src="shared.js"></script>
-	<script src="preview.js"></script>
+    <div class="dropdown-container">
+        <select id="regionDropdown" onchange="centerMapToRegion()">
+            <option value="">Sélectionner une région</option>
+            <option value="Tanger Tétouan Al Hoceima">Tanger Tétouan Al Hoceima</option>
+            <option value="L'Oriental">L'Oriental</option>
+            <option value="Fès Meknès">Fès Meknès</option>
+            <option value="Rabat Salé Kénitra">Rabat Salé Kénitra</option>
+            <option value="Béni Mellal Khénifra">Béni Mellal Khénifra</option>
+            <option value="Casablanca Settat">Casablanca Settat</option>
+            <option value="Marrakech Safi">Marrakech Safi</option>
+            <option value="Draa Tafilalet">Draa Tafilalet</option>
+            <option value="Souss Massa">Souss Massa</option>
+            <option value="Régions du Sud">Régions du Sud</option>
+        </select>
+    </div>
+    <div>
+        <h1 class = "title1" style="text-align: center;"></h1>
+        <h2 class = "title2" style="text-align: center;">Prévisions 2024-2028 en MDHS</h2>
+        <!-- <button id="toggleLayerBtn" style="position: fixed; top: 100px; left: 100px; z-index: 1000;">Programmation Communale</button> -->
+        <button style="position: fixed; top: 210px; left: 200px; z-index: 1000;" onclick="resetZoom()">Reset Zoom</button>
+        <div class="legend">
+            <div class=".bottom-right-text">
+                <h4>Engagements depuis 2015: 15,1 MMDHS
+                    <br>
+                    Budget Prévisionnel Global (2024-2028): 6.5 MMDHS</h4>
+            </div>
+                <div class="second-line">
+                    <h4 >Budget Programmé : 4.8 MMDHS
+                        <br>
+                        Budget Non Programmé (Solde): 1.7 MMDHS</h4>
+                </div>
+        </div>
+        <div id="map" class="map"></div>
+        <div id="popup"></div>
+        <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+        <script src="leaflet-providers.js"></script>
+        <script type="text/javascript" src="comm_urb_casa.js"></script>
+        <script type="text/javascript" src="tta.js"></script>
+        <script type="text/javascript" src="regions.js"></script>
+        <script type="text/javascript" src="script.js"></script>
+        <script type="text/javascript" src="comm_urb_oriental.js"></script>
+        <script type="text/javascript" src="comm_urb_bmk.js"></script>
+        <script type="text/javascript" src="comm_urb_draa_tafilalet.js"></script>
+        <script type="text/javascript" src="comm_urb_fes_meknes.js"></script>
+    </div>
 </body>
 </html>
