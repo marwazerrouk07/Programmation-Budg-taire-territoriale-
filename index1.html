@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Leaflet Provider Demo</title>
+	<title>Prévisions 2024-2028 Casablanca-Settat</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -16,21 +16,25 @@
              }
         #popup {
             position: fixed;
-            top: 25%; /* Adjust distance from top as needed */
-            left: 25%; /* Center horizontally */
-            transform: translateX(-50%); /* Center horizontally */
-            background-color: #bcbddc;
-            padding-left: 10px;
-            padding-right: 10px;
-            border: 1px solid #54278f;
-            border-radius: 5px;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 2px solid #54278f;
+            border-radius: 10px;
             font-size: 16px;
+            font-family: Arial, sans-serif;
+            color: #333;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             z-index: 9999;
             display: none;
+            max-width: 300px; /* Set a maximum width for the popup */
+            text-align: center; /* Center align the text */
         }
         .legend {
             position: fixed;
-            bottom: 50px; /* Ajustez la distance par rapport au bas de la page */
+            bottom: 25px; /* Ajustez la distance par rapport au bas de la page */
             right: 130px; /* Ajustez la distance par rapport à la droite de la page */
             background-color: #ffffff; /* Couleur de fond */
             padding: 10px; /* Espace intérieur */
@@ -50,91 +54,122 @@
 	</style>
 </head>
 <body>
-    <h1 style="text-align: center;">Programmation Budgétaire Territoriale</h1>
-    <h2 style="text-align: center;">Prévisions 2024-2028 en MDHS</h2>
-    <div class="legend">
-        <div class=".bottom-right-text">
-            <h4>Engagements depuis 2015: 15,1 MMDHS
-                <br>
-                Budget Prévisionnel Global (2024-2028): 6.5 MMDHS</h4>
-        </div>
-            <div class="second-line">
-                <h4 >Budget Programmé : 4.8 MMDHS
+    <div>
+        <h1 style="text-align: center;">Programmation Budgétaire Territoriale - Casablanca-Settat</h1>
+        <h2 style="text-align: center;">Prévisions 2024-2028 en MDHS</h2>
+        <div class="legend">
+            <div class=".bottom-right-text">
+                <h4>Engagements depuis 2015: 821.54 MDHS
                     <br>
-                    Budget Non Programmé (Solde): 1.7 MMDHS</h4>
+                    Budget Prévisionnel Global de la région(2024-2028): 1179.08 MDHS
+                    <br>
+                    Prévisionnel des engagements urbains: 929.08 MDHS
+                </h4>
             </div>
-    </div>
-    <script type="text/javascript" src="NEWW.js"></script>
-	<div id="map" class="map"></div>
-    <div id="popup"></div>
-	<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
-	<script src="leaflet-providers.js"></script>
-	<script>
-		var map = L.map('map', {
-			center: [29, -6],
-			zoom: 5,
-		});
-
-		var defaultLayer = L.tileLayer.provider('USGS.USImagery').addTo(map);
-	</script>
-     <script type="text/javascript">
-         var colorPalette = {
-            'Dakhla-Oued Eddahab': '#a63603', // Red
-            'Tanger-Tetouan-Hoceima': '#00ff00', // Green
-            'Rabat-Sale-Kenitra': '#fdae6b', // Orange
-            'Beni Mellal-Khenifra': '#e41a1c', // Dark Red
-            'Souss Massa': '#377eb8', // Blue
-            'Casablanca-Settat': '#4daf4a', // Green
-            'Oriental': '#ff7f00', // Amber
-            'Fes-Meknes': '#984ea3', // Purple
-            'Guelmim-Oued Noun': '#ff00ff', // Magenta
-            'Laayoune-Saguia Hamra': '#ffff33', // Yellow
-            'Daraa-Tafilelt': '#a65628', // Brown
-            'Marrakech-Safi': '#f781bf' // Pink
-            // Add more regions and colors as needed
-        };
-
-        // Define a function to get color based on region name
-        function getColor(region) {
-            return colorPalette[region] || '#808080'; // Default gray color if region not found in palette
-        }
-
-        // Define a function to update popup content
-        function updatePopupContent(properties) {
-            var content = "<b>Region:</b> " + properties.region + "<br>" +
-                          "<b>Engagements:</b> " + properties['Engagements '] + " Mdhs"+ "<br>" +
-                          "<b>Engagements non exécutés:</b> " + properties['Engagements non exécutés '] +" Mdhs"+ "<br>" +
-                          "<b>Prévisions:</b> " + properties.Prévisions + " Mdhs"+"<br>" +
-                          "<b>Solde:</b> " + properties.Solde +" Mdhs"+ "<br>" +
-                          "<b>Eng. Urbain:</b> " + properties['Eng. Urbain'] + " Mdhs"+"<br>" +
-                          "<b>Eng Rural:</b> " + properties['Eng. Rural']+" Mdhs";
-
-            document.getElementById("popup").innerHTML = content;
-        }
-
-        // Load GeoJSON data and add popup on hover
-        var geojson = L.geoJson(maregionf, {
-            style: function(feature) {
-                return {
-                    fillColor: getColor(feature.properties.region), // Use region name to get color
-                    weight: 2,
-                    opacity: 1,
-                    color: 'white',
-                    dashArray: '3',
-                    fillOpacity: 0.7
-                };
-            },
-            onEachFeature: function(feature, layer) {
-                layer.on('mouseover', function(e) {
-                    updatePopupContent(feature.properties);
-                    document.getElementById("popup").style.display = "block";
-                });
-                layer.on('mouseout', function(e) {
-                    document.getElementById("popup").style.display = "none";
-                });
+                <div class="second-line">
+                    <h4 >
+                        Budget Non Programmé (Solde): 599.05 MDHS</h4>
+                </div>
+        </div>
+        <script type="text/javascript" src="comm_urb_casa.js"></script>
+        <script type="text/javascript" src="regions.js"></script>
+        <div id="map" class="map"></div>
+        <div id="popup"></div>
+        <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+        <script src="leaflet-providers.js"></script>
+        <script>
+            var map = L.map('map', {
+                center: [33, -7],
+                zoom: 8,
+            });
+    
+            var defaultLayer = L.tileLayer.provider('Esri.WorldTopoMap').addTo(map)
+        </script>
+         <script type="text/javascript">
+          function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
             }
-        }).addTo(map);
 
-     </script>
+            // Initialize colorPalette
+            var colorPalette = {};
+
+            // Function to get color for a region name, generating a new one if not already in the palette
+            function getColor(NAME) {
+                if (!colorPalette[NAME]) {
+                    colorPalette[NAME] = getRandomColor();
+                }
+                return colorPalette[NAME];
+            }
+    
+            // Define a function to update popup content
+            function updatePopupContent(properties) {
+                var content = "<b>Commune:</b> " + properties.NAME + "<br>" +
+                              "<b>Prévisionnel des engagements:</b> " + properties.prévision +" Mdhs";
+                document.getElementById("popup").innerHTML = content;
+            }
+    
+            // Load GeoJSON data and add popup on hover
+            // var geojson2 = L.geoJson(anotherGeoJsonLayer, {
+            //     style: function(feature) {
+            //         return {
+            //             fillColor: getRandomColor(), // Different approach for second layer
+            //             weight: 2,
+            //             opacity: 1,
+            //             color: 'white',
+            //             dashArray: '3',
+            //             fillOpacity: 0.7
+            //         };
+            //     },
+            //     onEachFeature: function(feature, layer) {
+            //         layer.on('mouseover', function(e) {
+            //             updatePopupContent(feature.properties);
+            //             document.getElementById("popup").style.display = "block";
+            //         });
+            //         layer.on('mouseout', function(e) {
+                //             document.getElementById("popup").style.display = "none";
+                //         });
+                //     }
+                // }).addTo(map);
+            var geojson = L.geoJson(maregionf, {
+                style: function(feature) {
+                     return {
+                        fillColor: getColor(feature.properties.region), // Use region name to get color
+                        weight: 2,
+                        opacity: -1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.3
+                            };
+                        }}).addTo(map);
+            var geojson = L.geoJson(casaProvince, {
+                style: function(feature) {
+                    return {
+                        fillColor: getColor(feature.properties.NAME), // Use region name to get color
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 1,
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    layer.on('mouseover', function(e) {
+                        updatePopupContent(feature.properties);
+                        document.getElementById("popup").style.display = "block";
+                    });
+                    layer.on('mouseout', function(e) {
+                        document.getElementById("popup").style.display = "none";
+                    });
+                }
+            }).addTo(map);
+    
+         </script>
+    </div>
 </body>
+    
 </html>
